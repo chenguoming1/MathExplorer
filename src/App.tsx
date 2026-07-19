@@ -17,7 +17,7 @@ import { RewardsStore } from './components/RewardsStore';
 // Dynamic icon lookup mapper
 const IconMap: Record<string, React.ComponentType<any>> = {
   Plus, Shapes, Grid3X3, X, Divide, PieChart, Percent, 
-  Compass, Sparkles, Scale, Variable, Triangle
+  Compass, Sparkles, Scale, Variable, Triangle, Coins, Flame
 };
 
 // Default setup values

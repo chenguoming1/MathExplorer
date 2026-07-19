@@ -16,6 +16,13 @@ export const mathTopics: MathTopic[] = [
     grade: Grade.P1,
     icon: 'Shapes'
   },
+  {
+    id: 'p1_length',
+    title: 'Length & Comparing Sizes',
+    description: 'Learn to measure and compare lengths of objects using block units and rulers!',
+    grade: Grade.P1,
+    icon: 'Compass'
+  },
 
   // Primary 2
   {
@@ -31,6 +38,13 @@ export const mathTopics: MathTopic[] = [
     description: 'Learn multiplication as equal groups of items!',
     grade: Grade.P2,
     icon: 'X'
+  },
+  {
+    id: 'p2_money',
+    title: 'Money: Dollars & Cents',
+    description: 'Count coins and dollar notes, buy fun toys, and practice making change!',
+    grade: Grade.P2,
+    icon: 'Coins'
   },
 
   // Primary 3
@@ -48,6 +62,13 @@ export const mathTopics: MathTopic[] = [
     grade: Grade.P3,
     icon: 'PieChart'
   },
+  {
+    id: 'p3_area_perimeter',
+    title: 'Area & Perimeter',
+    description: 'Measure the space inside and around shapes using visual grids!',
+    grade: Grade.P3,
+    icon: 'Grid3X3'
+  },
 
   // Primary 4
   {
@@ -63,6 +84,13 @@ export const mathTopics: MathTopic[] = [
     description: 'Measure acute, obtuse, and right angles with an interactive protractor.',
     grade: Grade.P4,
     icon: 'Compass'
+  },
+  {
+    id: 'p4_decimals',
+    title: 'Decimals & Tenths',
+    description: 'Explore parts of a whole with decimals, place values, and jumping number lines!',
+    grade: Grade.P4,
+    icon: 'Percent'
   },
 
   // Primary 5
@@ -80,6 +108,13 @@ export const mathTopics: MathTopic[] = [
     grade: Grade.P5,
     icon: 'Scale'
   },
+  {
+    id: 'p5_volume',
+    title: 'Volume of Cuboids',
+    description: 'Build 3D shapes with unit blocks and calculate their total volume!',
+    grade: Grade.P5,
+    icon: 'Shapes'
+  },
 
   // Primary 6
   {
@@ -95,6 +130,13 @@ export const mathTopics: MathTopic[] = [
     description: 'Find missing angles in triangles, circles, and 3D shapes.',
     grade: Grade.P6,
     icon: 'Triangle'
+  },
+  {
+    id: 'p6_speed',
+    title: 'Speed, Distance & Time',
+    description: 'Animate cars on a race track and solve Speed, Distance, and Time formulas!',
+    grade: Grade.P6,
+    icon: 'Flame'
   }
 ];
 
@@ -563,6 +605,230 @@ export function generateQuizQuestions(topicId: string, count: number = 5): QuizQ
         hint: `The sum of all angles in a triangle is always 180°. Add ${ang1} and ${ang2}, then subtract from 180!`,
         visualData: { type: 'triangle_angle', ang1, ang2, ang3 }
       });
+    } else if (topicId === 'p1_length') {
+      // Length comparison
+      const lenA = Math.floor(Math.random() * 5) + 5; // 5 to 9
+      const lenB = Math.floor(Math.random() * 4) + 2; // 2 to 5
+      const diff = lenA - lenB;
+      const askLonger = Math.random() > 0.5;
+
+      if (askLonger) {
+        const wrongOpts = new Set<number>([diff + 1, diff + 2, diff - 1 >= 0 ? diff - 1 : diff + 3]);
+        const options = Array.from(wrongOpts);
+        const correctIndex = Math.floor(Math.random() * 4);
+        options.splice(correctIndex, 0, diff);
+
+        questions.push({
+          id: qId,
+          question: `Pencil A is ${lenA} blocks long and Pencil B is ${lenB} blocks long. How many blocks longer is Pencil A?`,
+          options: options.map(String),
+          correctIndex,
+          hint: `Subtract the shorter length (${lenB}) from the longer length (${lenA}).`,
+          visualData: { type: 'length_comp', lenA, lenB }
+        });
+      } else {
+        const wrongOpts = new Set<number>([lenA, lenB, lenA + lenB]);
+        while (wrongOpts.size < 3) {
+          wrongOpts.add(Math.floor(Math.random() * 10) + 1);
+        }
+        const options = Array.from(wrongOpts);
+        const correctIndex = Math.floor(Math.random() * 4);
+        options.splice(correctIndex, 0, lenB);
+
+        questions.push({
+          id: qId,
+          question: `Pencil A is ${lenA} blocks long and Pencil B is shorter. If Pencil B is the shorter one, which length could it be?`,
+          options: options.map(String),
+          correctIndex,
+          hint: `Look for the number that is smaller than Pencil A's length: ${lenA} blocks.`,
+          visualData: { type: 'length_comp', lenA, lenB }
+        });
+      }
+    } else if (topicId === 'p2_money') {
+      // Money math / buying toys
+      const costDollar = Math.floor(Math.random() * 4) + 1; // $1 to $4
+      const costCent = Math.random() > 0.5 ? 50 : 0;
+      const totalCost = costDollar + costCent / 100;
+
+      const payNote = costDollar >= 3 ? 10 : 5; // pay with $5 or $10
+      const change = payNote - totalCost;
+
+      const options = [
+        `$${change.toFixed(2)}`,
+        `$${(change + 0.50).toFixed(2)}`,
+        `$${(change - 0.50 >= 0 ? change - 0.50 : change + 1.00).toFixed(2)}`,
+        `$${(payNote - costDollar).toFixed(2)}`
+      ];
+      const finalOpts = Array.from(new Set(options)).slice(0, 4);
+      while (finalOpts.length < 4) {
+        finalOpts.push(`$${(Math.random() * 5 + 1).toFixed(2)}`);
+      }
+      let correctIndex = finalOpts.indexOf(`$${change.toFixed(2)}`);
+      if (correctIndex === -1) {
+        correctIndex = Math.floor(Math.random() * 4);
+        finalOpts[correctIndex] = `$${change.toFixed(2)}`;
+      }
+
+      questions.push({
+        id: qId,
+        question: `You buy a toy for $${totalCost.toFixed(2)} and pay with a $${payNote} note. How much change do you get back?`,
+        options: finalOpts,
+        correctIndex,
+        hint: `Subtract the cost of the toy ($${totalCost.toFixed(2)}) from your $${payNote} note.`,
+        visualData: { type: 'money_change', cost: totalCost, pay: payNote }
+      });
+    } else if (topicId === 'p3_area_perimeter') {
+      // Area and perimeter questions
+      const width = Math.floor(Math.random() * 4) + 3; // 3 to 6
+      const height = Math.floor(Math.random() * 3) + 2; // 2 to 4
+      const isArea = Math.random() > 0.5;
+
+      if (isArea) {
+        const area = width * height;
+        const wrongOpts = new Set<number>([area + 2, area - 2 > 0 ? area - 2 : area + 4, width + height]);
+        while (wrongOpts.size < 3) {
+          wrongOpts.add(area + Math.floor(Math.random() * 10) - 5);
+        }
+        const options = Array.from(wrongOpts);
+        const correctIndex = Math.floor(Math.random() * 4);
+        options.splice(correctIndex, 0, area);
+
+        questions.push({
+          id: qId,
+          question: `A rectangular playground has a width of ${width} meters and a height of ${height} meters. What is its Area?`,
+          options: options.map(o => `${o} sq m`),
+          correctIndex,
+          hint: `Area is the space inside. Use the formula: Width × Height. So multiply ${width} by ${height}!`,
+          visualData: { type: 'area_peri_calc', w: width, h: height, isArea: true }
+        });
+      } else {
+        const perimeter = 2 * (width + height);
+        const wrongOpts = new Set<number>([width * height, width + height, perimeter + 2]);
+        while (wrongOpts.size < 3) {
+          wrongOpts.add(perimeter + Math.floor(Math.random() * 6) - 3);
+        }
+        const options = Array.from(wrongOpts);
+        const correctIndex = Math.floor(Math.random() * 4);
+        options.splice(correctIndex, 0, perimeter);
+
+        questions.push({
+          id: qId,
+          question: `A rectangular table has a width of ${width} cm and a height of ${height} cm. What is its Perimeter (the distance around the outside)?`,
+          options: options.map(o => `${o} cm`),
+          correctIndex,
+          hint: `Perimeter is the total length of all 4 outer sides: ${width} + ${height} + ${width} + ${height}.`,
+          visualData: { type: 'area_peri_calc', w: width, h: height, isArea: false }
+        });
+      }
+    } else if (topicId === 'p4_decimals') {
+      // Fractions to decimals & tenths comparison
+      const tenths = Math.floor(Math.random() * 8) + 1; // 1 to 8 tenths
+      const isFractionToDecimal = Math.random() > 0.5;
+
+      if (isFractionToDecimal) {
+        const ansStr = `0.${tenths}`;
+        const options = [`0.${tenths}`, `0.0${tenths}`, `${tenths}.0`, `0.${tenths + 1}`];
+        const finalOpts = Array.from(new Set(options)).slice(0, 4);
+        let correctIndex = finalOpts.indexOf(ansStr);
+        if (correctIndex === -1) {
+          correctIndex = Math.floor(Math.random() * 4);
+          finalOpts[correctIndex] = ansStr;
+        }
+
+        questions.push({
+          id: qId,
+          question: `Look at the fraction ${tenths}/10. What is this written as a decimal number?`,
+          options: finalOpts,
+          correctIndex,
+          hint: `${tenths} tenths means ${tenths} out of 10 parts. In decimals, the first place after the dot represents tenths.`,
+          visualData: { type: 'decimals_val', value: tenths }
+        });
+      } else {
+        const targetDecimal = `0.${tenths}`;
+        const options = [
+          `${tenths}/10`,
+          `1/${tenths}`,
+          `${tenths}/100`,
+          `${tenths + 1}/10`
+        ];
+        const finalOpts = Array.from(new Set(options)).slice(0, 4);
+        let correctIndex = finalOpts.indexOf(`${tenths}/10`);
+        if (correctIndex === -1) {
+          correctIndex = Math.floor(Math.random() * 4);
+          finalOpts[correctIndex] = `${tenths}/10`;
+        }
+
+        questions.push({
+          id: qId,
+          question: `What is the decimal number ${targetDecimal} written as a fraction in its simplest tenth form?`,
+          options: finalOpts,
+          correctIndex,
+          hint: `The decimal ${targetDecimal} has ${tenths} in the tenths column, which is equivalent to ?/10.`,
+          visualData: { type: 'decimals_val', value: tenths }
+        });
+      }
+    } else if (topicId === 'p5_volume') {
+      // Volume calculation
+      const l = Math.floor(Math.random() * 3) + 3; // 3 to 5
+      const w = Math.floor(Math.random() * 2) + 2; // 2 to 3
+      const h = Math.floor(Math.random() * 3) + 2; // 2 to 4
+      const volume = l * w * h;
+
+      const wrongOpts = new Set<number>([l + w + h, l * w, volume + 4, volume - 4 > 0 ? volume - 4 : volume + 10]);
+      while (wrongOpts.size < 3) {
+        wrongOpts.add(volume + Math.floor(Math.random() * 10) - 5);
+      }
+      const options = Array.from(wrongOpts);
+      const correctIndex = Math.floor(Math.random() * 4);
+      options.splice(correctIndex, 0, volume);
+
+      questions.push({
+        id: qId,
+        question: `A cardboard box has length = ${l} cm, width = ${w} cm, and height = ${h} cm. What is its Volume in cubic cm?`,
+        options: options.map(o => `${o} cubic cm`),
+        correctIndex,
+        hint: `Volume is calculated using the formula: Length × Width × Height. Multiply ${l} × ${w} × ${h}.`,
+        visualData: { type: 'volume_calc', l, w, h }
+      });
+    } else if (topicId === 'p6_speed') {
+      // Speed, distance, and time equations
+      const timeSec = Math.floor(Math.random() * 4) + 2; // 2 to 5 seconds
+      const speedMPS = [10, 20, 15, 25][Math.floor(Math.random() * 4)]; // m/s
+      const distM = speedMPS * timeSec;
+
+      const askType = Math.random() > 0.5 ? 'distance' : 'speed';
+      if (askType === 'distance') {
+        const wrongOpts = new Set<number>([speedMPS + timeSec, speedMPS / timeSec, distM + 10, distM - 10 > 0 ? distM - 10 : distM + 20]);
+        const options = Array.from(wrongOpts);
+        const correctIndex = Math.floor(Math.random() * 4);
+        options.splice(correctIndex, 0, distM);
+
+        questions.push({
+          id: qId,
+          question: `A model rocket travels at a constant speed of ${speedMPS} meters per second. How far (Distance) does it travel in ${timeSec} seconds?`,
+          options: options.map(o => `${o} meters`),
+          correctIndex,
+          hint: `Distance is Speed multiplied by Time: Distance = Speed × Time. Multiply ${speedMPS} × ${timeSec}!`,
+          visualData: { type: 'speed_calc', speed: speedMPS, time: timeSec, distance: distM }
+        });
+      } else {
+        const wrongOpts = new Set<number>([speedMPS + timeSec, speedMPS - 5, speedMPS + 10]);
+        while (wrongOpts.size < 3) {
+          wrongOpts.add(speedMPS + Math.floor(Math.random() * 8) - 4);
+        }
+        const options = Array.from(wrongOpts);
+        const correctIndex = Math.floor(Math.random() * 4);
+        options.splice(correctIndex, 0, speedMPS);
+
+        questions.push({
+          id: qId,
+          question: `An RC car travels a distance of ${distM} meters in ${timeSec} seconds. What is its average Speed in meters per second?`,
+          options: options.map(o => `${o} m/s`),
+          correctIndex,
+          hint: `Speed is Distance divided by Time: Speed = Distance ÷ Time. Divide ${distM} by ${timeSec}!`,
+          visualData: { type: 'speed_calc', speed: speedMPS, time: timeSec, distance: distM }
+        });
+      }
     } else {
       // Default fallback
       questions.push({

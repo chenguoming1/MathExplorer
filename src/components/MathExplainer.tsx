@@ -59,6 +59,33 @@ export const MathExplainer: React.FC<MathExplainerProps> = ({ topicId, onStartQu
   const [p6AngleA, setP6AngleA] = useState(60);
   const [p6AngleB, setP6AngleB] = useState(70);
 
+  // P1 Length
+  const [p1LengthA, setP1LengthA] = useState(7);
+  const [p1LengthB, setP1LengthB] = useState(4);
+
+  // P2 Money
+  const [p2ToyCost, setP2ToyCost] = useState(3.50);
+  const [p2PaidDollar, setP2PaidDollar] = useState(0);
+  const [p2PaidCent, setP2PaidCent] = useState(0);
+
+  // P3 Area & Perimeter
+  const [p3AreaWidth, setP3AreaWidth] = useState(5);
+  const [p3AreaHeight, setP3AreaHeight] = useState(3);
+  const [p3ShowGrid, setP3ShowGrid] = useState(true);
+
+  // P4 Decimals
+  const [p4DeciVal, setP4DeciVal] = useState(4); // tenths
+
+  // P5 Volume
+  const [p5VolL, setP5VolL] = useState(4);
+  const [p5VolW, setP5VolW] = useState(3);
+  const [p5VolH, setP5VolH] = useState(2);
+
+  // P6 Speed
+  const [p6Speed, setP6Speed] = useState(20);
+  const [p6Time, setP6Time] = useState(3);
+  const [p6IsDriving, setP6IsDriving] = useState(false);
+
   // Helper to find greatest common divisor for ratio simplifying
   const gcd = (a: number, b: number): number => {
     return b === 0 ? a : gcd(b, a % b);
@@ -1368,6 +1395,600 @@ export const MathExplainer: React.FC<MathExplainerProps> = ({ topicId, onStartQu
                   );
                 })()}
               </svg>
+            </div>
+          </div>
+        );
+      }
+      case 'p1_length': {
+        const diff = p1LengthA - p1LengthB;
+        const stateMsg = diff > 0 
+          ? `Pencil A is ${diff} blocks longer than Pencil B!` 
+          : diff < 0 
+            ? `Pencil B is ${Math.abs(diff)} blocks longer than Pencil A!` 
+            : "Both pencils are exactly the same length!";
+        return (
+          <div id="p1-length-explainer" className="space-y-6">
+            <p className="text-sm text-slate-600 font-medium text-center">
+              Drag the sliders to compare the lengths of Pencil A and Pencil B. Counting block units is how we learn to measure!
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-amber-50 p-4 rounded-xl border border-amber-100">
+              <div className="space-y-4">
+                <div className="bg-white p-3 rounded-lg shadow-xs">
+                  <div className="flex justify-between text-xs font-bold text-amber-800 mb-1">
+                    <span>Pencil A: {p1LengthA} blocks</span>
+                  </div>
+                  <input 
+                    type="range" 
+                    min="1" 
+                    max="10" 
+                    value={p1LengthA} 
+                    onChange={(e) => setP1LengthA(parseInt(e.target.value))}
+                    className="w-full accent-amber-500 h-2 bg-slate-200 rounded-lg cursor-pointer"
+                  />
+                </div>
+                <div className="bg-white p-3 rounded-lg shadow-xs">
+                  <div className="flex justify-between text-xs font-bold text-slate-700 mb-1">
+                    <span>Pencil B: {p1LengthB} blocks</span>
+                  </div>
+                  <input 
+                    type="range" 
+                    min="1" 
+                    max="10" 
+                    value={p1LengthB} 
+                    onChange={(e) => setP1LengthB(parseInt(e.target.value))}
+                    className="w-full accent-slate-500 h-2 bg-slate-200 rounded-lg cursor-pointer"
+                  />
+                </div>
+              </div>
+
+              <div className="bg-slate-900 text-white p-4 rounded-xl shadow-md text-center flex flex-col justify-center">
+                <span className="text-[10px] text-amber-300 font-black uppercase tracking-wider mb-2">Length Comparison</span>
+                <div className="text-base font-bold text-emerald-400">
+                  {stateMsg}
+                </div>
+                <div className="text-xs text-slate-400 mt-2">
+                  Subtract lengths: {Math.max(p1LengthA, p1LengthB)} - {Math.min(p1LengthA, p1LengthB)} = {Math.abs(diff)} unit difference!
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl border-2 border-dashed border-amber-200 space-y-4">
+              <div className="flex items-center gap-3">
+                <span className="w-16 font-bold text-xs text-amber-700">Pencil A:</span>
+                <div className="flex gap-1 flex-1 bg-amber-50 p-1.5 rounded-lg border border-amber-200">
+                  {Array.from({ length: p1LengthA }).map((_, idx) => (
+                    <motion.div 
+                      key={`a_${idx}`}
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="h-8 flex-1 bg-amber-400 rounded-md border border-amber-500/20 flex items-center justify-center text-[10px] font-black text-amber-900 shadow-xs"
+                    >
+                      {idx + 1}
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="w-16 font-bold text-xs text-slate-600">Pencil B:</span>
+                <div className="flex gap-1 flex-1 bg-slate-100 p-1.5 rounded-lg border border-slate-200">
+                  {Array.from({ length: p1LengthB }).map((_, idx) => (
+                    <motion.div 
+                      key={`b_${idx}`}
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="h-8 flex-1 bg-slate-400 rounded-md border border-slate-500/20 flex items-center justify-center text-[10px] font-black text-slate-100 shadow-xs"
+                    >
+                      {idx + 1}
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+      case 'p2_money': {
+        const totalPaid = p2PaidDollar + (p2PaidCent / 100);
+        const change = totalPaid - p2ToyCost;
+        const isEnough = totalPaid >= p2ToyCost;
+
+        return (
+          <div id="p2-money-explainer" className="space-y-6">
+            <p className="text-sm text-slate-600 font-medium text-center">
+              Let's buy a Toy! Select a toy, then click the coins and dollar notes to place them into the cash tray to pay.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Toy selector */}
+              <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 space-y-3">
+                <span className="text-xs font-black text-amber-800 uppercase tracking-wider block">1. Select Toy</span>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { name: '🧸 Teddy Bear', price: 2.50 },
+                    { name: '🤖 Toy Robot', price: 4.80 },
+                    { name: '🚗 Race Car', price: 3.20 },
+                    { name: '🎈 Balloon Set', price: 1.50 }
+                  ].map((toy) => (
+                    <button
+                      key={toy.name}
+                      onClick={() => {
+                        setP2ToyCost(toy.price);
+                        setP2PaidDollar(0);
+                        setP2PaidCent(0);
+                      }}
+                      className={`p-2 rounded-lg text-xs font-black border-2 transition text-left cursor-pointer ${
+                        p2ToyCost === toy.price 
+                          ? 'border-indigo-500 bg-indigo-50 text-indigo-900' 
+                          : 'border-slate-200 bg-white hover:bg-slate-50 text-slate-700'
+                      }`}
+                    >
+                      <div>{toy.name}</div>
+                      <div className="text-indigo-600 mt-0.5">${toy.price.toFixed(2)}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Payment interface */}
+              <div className="bg-emerald-50 p-4 rounded-xl border border-emerald-100 space-y-3">
+                <span className="text-xs font-black text-emerald-800 uppercase tracking-wider block">2. Put Cash in Tray</span>
+                <div className="space-y-2">
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={() => setP2PaidDollar(prev => prev + 1)}
+                      className="flex-1 bg-white hover:bg-slate-50 border border-slate-300 py-1.5 rounded-lg font-black text-xs text-slate-800 shadow-xs cursor-pointer"
+                    >
+                      +$1.00 Note
+                    </button>
+                    <button 
+                      onClick={() => setP2PaidDollar(prev => prev + 2)}
+                      className="flex-1 bg-white hover:bg-slate-50 border border-slate-300 py-1.5 rounded-lg font-black text-xs text-slate-800 shadow-xs cursor-pointer"
+                    >
+                      +$2.00 Note
+                    </button>
+                  </div>
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={() => setP2PaidCent(prev => prev + 50)}
+                      className="flex-1 bg-white hover:bg-slate-50 border border-slate-300 py-1.5 rounded-lg font-black text-xs text-slate-800 shadow-xs cursor-pointer"
+                    >
+                      +50¢ Coin
+                    </button>
+                    <button 
+                      onClick={() => setP2PaidCent(prev => prev + 20)}
+                      className="flex-1 bg-white hover:bg-slate-50 border border-slate-300 py-1.5 rounded-lg font-black text-xs text-slate-800 shadow-xs cursor-pointer"
+                    >
+                      +20¢ Coin
+                    </button>
+                  </div>
+                  <button 
+                    onClick={() => {
+                      setP2PaidDollar(0);
+                      setP2PaidCent(0);
+                    }}
+                    className="w-full bg-slate-200 hover:bg-slate-300 text-slate-700 py-1 rounded-lg font-bold text-[10px] uppercase cursor-pointer"
+                  >
+                    Reset Tray
+                  </button>
+                </div>
+              </div>
+
+              {/* Checkout monitor */}
+              <div className="bg-slate-900 text-white p-4 rounded-xl shadow-md flex flex-col justify-between text-center">
+                <div>
+                  <span className="text-[10px] text-indigo-300 font-black uppercase tracking-wider block mb-1">Receipt & Change</span>
+                  <div className="space-y-1 text-xs border-b border-slate-700 pb-2">
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Item Cost:</span>
+                      <span className="font-bold">${p2ToyCost.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Cash Tray:</span>
+                      <span className="font-bold text-emerald-400">${totalPaid.toFixed(2)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="py-2">
+                  {isEnough ? (
+                    <div className="space-y-1">
+                      <div className="text-2xl font-black text-emerald-400 animate-bounce">
+                        Change: ${change.toFixed(2)}
+                      </div>
+                      <span className="text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-0.5 rounded-full font-black">
+                        COMPLETED! 🎉
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="space-y-1">
+                      <div className="text-lg font-black text-rose-400">
+                        Need ${(p2ToyCost - totalPaid).toFixed(2)} more
+                      </div>
+                      <span className="text-[10px] bg-rose-950 text-rose-300 border border-rose-800 px-2 py-0.5 rounded-full font-black">
+                        WAITING FOR CASH...
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+      case 'p3_area_perimeter': {
+        const area = p3AreaWidth * p3AreaHeight;
+        const perimeter = 2 * (p3AreaWidth + p3AreaHeight);
+
+        return (
+          <div id="p3-area-peri-explainer" className="space-y-6">
+            <p className="text-sm text-slate-600 font-medium text-center">
+              Adjust the Width and Height to see how Area (inside squares) and Perimeter (outer border) change dynamically!
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-indigo-50/50 p-4 rounded-xl border border-indigo-100">
+              <div className="space-y-4">
+                <div className="bg-white p-3 rounded-lg shadow-xs">
+                  <div className="flex justify-between text-xs font-bold text-indigo-800 mb-1">
+                    <span>Width: {p3AreaWidth} meters</span>
+                  </div>
+                  <input 
+                    type="range" 
+                    min="2" 
+                    max="8" 
+                    value={p3AreaWidth} 
+                    onChange={(e) => setP3AreaWidth(parseInt(e.target.value))}
+                    className="w-full accent-indigo-500 h-2 bg-slate-200 rounded-lg cursor-pointer"
+                  />
+                </div>
+                <div className="bg-white p-3 rounded-lg shadow-xs">
+                  <div className="flex justify-between text-xs font-bold text-pink-800 mb-1">
+                    <span>Height: {p3AreaHeight} meters</span>
+                  </div>
+                  <input 
+                    type="range" 
+                    min="2" 
+                    max="6" 
+                    value={p3AreaHeight} 
+                    onChange={(e) => setP3AreaHeight(parseInt(e.target.value))}
+                    className="w-full accent-pink-500 h-2 bg-slate-200 rounded-lg cursor-pointer"
+                  />
+                </div>
+                <div className="flex justify-center">
+                  <button 
+                    onClick={() => setP3ShowGrid(!p3ShowGrid)}
+                    className="px-3 py-1 bg-white hover:bg-slate-50 border border-slate-300 rounded-lg text-xs font-black text-slate-700 shadow-xs cursor-pointer"
+                  >
+                    {p3ShowGrid ? 'Hide Grid Numbers' : 'Show Grid Numbers'}
+                  </button>
+                </div>
+              </div>
+
+              <div className="bg-slate-900 text-white p-4 rounded-xl shadow-md text-center flex flex-col justify-center space-y-3">
+                <div>
+                  <span className="text-[10px] text-indigo-300 font-black uppercase tracking-wider">Area (Inside Space)</span>
+                  <div className="text-2xl font-black text-indigo-400">
+                    {p3AreaWidth} × {p3AreaHeight} = {area} sq m
+                  </div>
+                </div>
+                <div className="border-t border-slate-800 pt-2">
+                  <span className="text-[10px] text-rose-300 font-black uppercase tracking-wider">Perimeter (Outer Border)</span>
+                  <div className="text-2xl font-black text-rose-400">
+                    2 × ({p3AreaWidth} + {p3AreaHeight}) = {perimeter} m
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl border-2 border-dashed border-indigo-200 flex justify-center items-center">
+              <div className="flex flex-col gap-1 p-2 bg-indigo-50/20 rounded-xl border border-indigo-100">
+                {Array.from({ length: p3AreaHeight }).map((_, rIdx) => (
+                  <div key={rIdx} className="flex gap-1">
+                    {Array.from({ length: p3AreaWidth }).map((_, cIdx) => {
+                      const count = rIdx * p3AreaWidth + cIdx + 1;
+                      const isBorder = rIdx === 0 || rIdx === p3AreaHeight - 1 || cIdx === 0 || cIdx === p3AreaWidth - 1;
+                      return (
+                        <motion.div 
+                          key={cIdx}
+                          initial={{ scale: 0.8 }}
+                          animate={{ scale: 1 }}
+                          className={`w-10 h-10 rounded-lg flex items-center justify-center text-xs font-black border transition ${
+                            isBorder 
+                              ? 'border-rose-400 bg-rose-50 text-rose-800 shadow-xs' 
+                              : 'border-indigo-200 bg-indigo-50/50 text-indigo-800'
+                          }`}
+                        >
+                          {p3ShowGrid ? count : ''}
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      }
+      case 'p4_decimals': {
+        const fracStr = `${p4DeciVal}/10`;
+        const decimalStr = `0.${p4DeciVal}`;
+
+        return (
+          <div id="p4-decimals-explainer" className="space-y-6">
+            <p className="text-sm text-slate-600 font-medium text-center">
+              Move the slider to shade the fraction. See how Tenths translate directly into decimals on the jumping number line!
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-pink-50/50 p-4 rounded-xl border border-pink-100">
+              <div className="space-y-4">
+                <div className="bg-white p-3 rounded-lg shadow-xs">
+                  <div className="flex justify-between text-xs font-bold text-pink-800 mb-1">
+                    <span>Shaded Parts: {p4DeciVal} Tenths</span>
+                  </div>
+                  <input 
+                    type="range" 
+                    min="0" 
+                    max="10" 
+                    value={p4DeciVal} 
+                    onChange={(e) => setP4DeciVal(parseInt(e.target.value))}
+                    className="w-full accent-pink-500 h-2 bg-slate-200 rounded-lg cursor-pointer"
+                  />
+                </div>
+              </div>
+
+              <div className="bg-slate-900 text-white p-4 rounded-xl shadow-md text-center flex flex-col justify-center gap-3">
+                <div className="flex justify-around items-center">
+                  <div>
+                    <span className="text-[10px] text-pink-300 font-black uppercase tracking-wider block mb-1">Fraction</span>
+                    <span className="text-3xl font-black text-pink-400">{fracStr}</span>
+                  </div>
+                  <div className="text-xl text-slate-500 font-black">=</div>
+                  <div>
+                    <span className="text-[10px] text-emerald-300 font-black uppercase tracking-wider block mb-1">Decimal</span>
+                    <span className="text-3xl font-black text-emerald-400">{decimalStr}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Shaded blocks display */}
+            <div className="bg-white p-6 rounded-2xl border-2 border-dashed border-pink-200 space-y-4">
+              <div className="w-full flex h-10 bg-slate-100 rounded-xl border border-pink-100 overflow-hidden shadow-xs">
+                {Array.from({ length: 10 }).map((_, idx) => (
+                  <div 
+                    key={idx} 
+                    className={`h-full flex-1 border-r border-pink-100 last:border-0 transition-colors ${
+                      idx < p4DeciVal ? 'bg-pink-400' : 'bg-slate-50'
+                    }`}
+                  />
+                ))}
+              </div>
+
+              {/* Number Line with animal avatar jumping */}
+              <div className="relative h-16 bg-slate-50 rounded-xl border border-slate-100 px-4 flex flex-col justify-end pb-2 overflow-visible">
+                <div className="absolute left-0 right-0 h-0.5 bg-slate-300 bottom-4 mx-4"></div>
+                {/* Tick marks */}
+                <div className="flex justify-between relative px-2">
+                  {Array.from({ length: 11 }).map((_, idx) => {
+                    const val = idx / 10;
+                    const isJumpTarget = idx === p4DeciVal;
+                    return (
+                      <div key={idx} className="flex flex-col items-center relative">
+                        <div className={`w-0.5 h-2 ${isJumpTarget ? 'bg-emerald-500 h-3' : 'bg-slate-400'} mb-1`}></div>
+                        <span className={`text-[9px] font-black ${isJumpTarget ? 'text-emerald-600' : 'text-slate-400'}`}>
+                          {val.toFixed(1)}
+                        </span>
+                        {isJumpTarget && (
+                          <motion.span 
+                            key={idx}
+                            initial={{ y: -25, scale: 0.5 }}
+                            animate={{ y: -38, scale: 1 }}
+                            transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+                            className="absolute text-xl select-none"
+                          >
+                            🐸
+                          </motion.span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+      case 'p5_volume': {
+        const volume = p5VolL * p5VolW * p5VolH;
+
+        return (
+          <div id="p5-volume-explainer" className="space-y-6">
+            <p className="text-sm text-slate-600 font-medium text-center">
+              Build a 3D cuboid with 1-cm blocks! Adjust the sliders to see how Length, Width, and Height combine to make Volume.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-teal-50/50 p-4 rounded-xl border border-teal-100">
+              <div className="space-y-3">
+                <div className="bg-white px-3 py-2 rounded-lg shadow-xs">
+                  <div className="flex justify-between text-xs font-bold text-teal-800 mb-0.5">
+                    <span>Length (l): {p5VolL} cm</span>
+                  </div>
+                  <input 
+                    type="range" 
+                    min="1" 
+                    max="5" 
+                    value={p5VolL} 
+                    onChange={(e) => setP5VolL(parseInt(e.target.value))}
+                    className="w-full accent-teal-500 h-1.5 bg-slate-200 rounded-lg cursor-pointer"
+                  />
+                </div>
+                <div className="bg-white px-3 py-2 rounded-lg shadow-xs">
+                  <div className="flex justify-between text-xs font-bold text-teal-800 mb-0.5">
+                    <span>Width (w): {p5VolW} cm</span>
+                  </div>
+                  <input 
+                    type="range" 
+                    min="1" 
+                    max="5" 
+                    value={p5VolW} 
+                    onChange={(e) => setP5VolW(parseInt(e.target.value))}
+                    className="w-full accent-teal-500 h-1.5 bg-slate-200 rounded-lg cursor-pointer"
+                  />
+                </div>
+                <div className="bg-white px-3 py-2 rounded-lg shadow-xs">
+                  <div className="flex justify-between text-xs font-bold text-teal-800 mb-0.5">
+                    <span>Height (h): {p5VolH} cm</span>
+                  </div>
+                  <input 
+                    type="range" 
+                    min="1" 
+                    max="5" 
+                    value={p5VolH} 
+                    onChange={(e) => setP5VolH(parseInt(e.target.value))}
+                    className="w-full accent-teal-500 h-1.5 bg-slate-200 rounded-lg cursor-pointer"
+                  />
+                </div>
+              </div>
+
+              <div className="bg-slate-900 text-white p-4 rounded-xl shadow-md text-center flex flex-col justify-center space-y-2">
+                <span className="text-[10px] text-teal-300 font-black uppercase tracking-wider block">Volume Formula</span>
+                <div className="text-xs font-medium text-slate-300">
+                  Length × Width × Height
+                </div>
+                <div className="text-2xl font-black text-emerald-400">
+                  {p5VolL} × {p5VolW} × {p5VolH}
+                </div>
+                <div className="text-3xl font-black text-white mt-1">
+                  = {volume} <span className="text-xs text-slate-400 font-bold">cubic cm</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Isometric 3D styled blocks stacking render */}
+            <div className="bg-white p-6 rounded-2xl border-2 border-dashed border-teal-200 flex flex-col items-center gap-4">
+              <span className="text-xs font-black text-teal-800 uppercase tracking-wider">
+                Layers Visualizer: {p5VolH} layers of ({p5VolL}×{p5VolW}) blocks
+              </span>
+              <div className="flex flex-wrap gap-4 justify-center">
+                {Array.from({ length: p5VolH }).map((_, layerIdx) => (
+                  <div key={layerIdx} className="bg-teal-50 p-2 rounded-xl border border-teal-200 text-center relative shadow-xs">
+                    <span className="text-[9px] font-black text-teal-800 absolute -top-2 left-2 bg-white px-1 border border-teal-200 rounded">
+                      Layer {layerIdx + 1}
+                    </span>
+                    <div className="flex flex-col gap-1 mt-1">
+                      {Array.from({ length: p5VolW }).map((_, rIdx) => (
+                        <div key={rIdx} className="flex gap-1">
+                          {Array.from({ length: p5VolL }).map((_, cIdx) => (
+                            <motion.div 
+                              key={cIdx}
+                              initial={{ scale: 0.7 }}
+                              animate={{ scale: 1 }}
+                              className="w-6 h-6 bg-teal-400 rounded border border-teal-500 shadow-xs"
+                            />
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      }
+      case 'p6_speed': {
+        const distance = p6Speed * p6Time;
+
+        return (
+          <div id="p6-speed-explainer" className="space-y-6">
+            <p className="text-sm text-slate-600 font-medium text-center">
+              Explore Constant Speed motion! Set the Car Speed and the Travel Time, then click "Go Car Go!" to watch the simulation.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-orange-50/50 p-4 rounded-xl border border-orange-100">
+              <div className="space-y-4">
+                <div className="bg-white p-3 rounded-lg shadow-xs">
+                  <div className="flex justify-between text-xs font-bold text-orange-800 mb-1">
+                    <span>Speed (S): {p6Speed} meters / second</span>
+                  </div>
+                  <input 
+                    type="range" 
+                    min="10" 
+                    max="50" 
+                    step="5"
+                    value={p6Speed} 
+                    onChange={(e) => setP6Speed(parseInt(e.target.value))}
+                    className="w-full accent-orange-500 h-2 bg-slate-200 rounded-lg cursor-pointer"
+                  />
+                </div>
+                <div className="bg-white p-3 rounded-lg shadow-xs">
+                  <div className="flex justify-between text-xs font-bold text-orange-800 mb-1">
+                    <span>Time (T): {p6Time} seconds</span>
+                  </div>
+                  <input 
+                    type="range" 
+                    min="1" 
+                    max="5" 
+                    value={p6Time} 
+                    onChange={(e) => setP6Time(parseInt(e.target.value))}
+                    className="w-full accent-orange-500 h-2 bg-slate-200 rounded-lg cursor-pointer"
+                  />
+                </div>
+                <div className="flex justify-center">
+                  <button 
+                    onClick={() => {
+                      setP6IsDriving(true);
+                      setTimeout(() => setP6IsDriving(false), p6Time * 1000);
+                    }}
+                    disabled={p6IsDriving}
+                    className={`px-6 py-2.5 rounded-xl font-black text-sm shadow-md transition ${
+                      p6IsDriving 
+                        ? 'bg-slate-300 text-slate-500 cursor-not-allowed' 
+                        : 'bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white cursor-pointer'
+                    }`}
+                  >
+                    {p6IsDriving ? '🏎️ Zooming...' : 'Go Car Go! 🏎️'}
+                  </button>
+                </div>
+              </div>
+
+              <div className="bg-slate-900 text-white p-4 rounded-xl shadow-md text-center flex flex-col justify-center space-y-2">
+                <span className="text-[10px] text-orange-300 font-black uppercase tracking-wider block">Formula: Distance = Speed × Time</span>
+                <div className="text-xs text-slate-400">
+                  {p6Speed} m/s for {p6Time}s
+                </div>
+                <div className="text-4xl font-black text-orange-400 mt-2">
+                  {distance} <span className="text-lg text-slate-200 font-extrabold">meters</span>
+                </div>
+                <p className="text-[11px] text-slate-400">
+                  A faster speed or more time lets the car travel further!
+                </p>
+              </div>
+            </div>
+
+            {/* Racetrack Visual Animation */}
+            <div className="bg-white p-6 rounded-2xl border-2 border-dashed border-orange-200 min-h-[160px] flex flex-col justify-center relative overflow-hidden">
+              <div className="w-full h-8 bg-slate-800 rounded-lg relative flex items-center border-y-4 border-dashed border-yellow-400">
+                {/* Distance markers */}
+                <div className="absolute inset-0 flex justify-between px-6 opacity-40 text-[9px] font-mono text-white items-center pointer-events-none">
+                  <span>0m</span>
+                  <span>50m</span>
+                  <span>100m</span>
+                  <span>150m</span>
+                  <span>200m</span>
+                  <span>250m</span>
+                </div>
+
+                <motion.div 
+                  key={p6IsDriving ? "driving" : "stopped"}
+                  initial={{ x: 10 }}
+                  animate={p6IsDriving ? { x: '85%' } : { x: 10 }}
+                  transition={{ duration: p6Time, ease: "linear" }}
+                  className="text-2xl select-none relative z-10"
+                >
+                  🏎️
+                </motion.div>
+              </div>
+
+              {p6IsDriving && (
+                <div className="text-center mt-3 text-xs font-black text-orange-600 animate-pulse">
+                  Driving at {p6Speed} meters/second... Time elapsed!
+                </div>
+              )}
             </div>
           </div>
         );

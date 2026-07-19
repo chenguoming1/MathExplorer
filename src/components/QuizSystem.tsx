@@ -336,6 +336,132 @@ export const QuizSystem: React.FC<QuizSystemProps> = ({ topicId, grade, onQuizCo
           </div>
         );
       }
+      case 'length_comp': {
+        const { lenA, lenB } = visualData;
+        return (
+          <div className="flex flex-col gap-2 p-3 bg-amber-50/50 rounded-xl border border-amber-100 max-w-[280px] mx-auto my-2">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-black text-amber-700 w-16">Pencil A:</span>
+              <div className="flex gap-0.5 flex-1 bg-white p-1 rounded border border-amber-200">
+                {Array.from({ length: lenA }).map((_, i) => (
+                  <div key={i} className="h-4 flex-1 bg-amber-400 rounded-xs" />
+                ))}
+              </div>
+              <span className="text-xs font-bold text-slate-500">{lenA}u</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-black text-slate-700 w-16">Pencil B:</span>
+              <div className="flex gap-0.5 flex-1 bg-white p-1 rounded border border-slate-200">
+                {Array.from({ length: lenB }).map((_, i) => (
+                  <div key={i} className="h-4 flex-1 bg-slate-300 rounded-xs" />
+                ))}
+              </div>
+              <span className="text-xs font-bold text-slate-500">{lenB}u</span>
+            </div>
+          </div>
+        );
+      }
+      case 'money_change': {
+        const { cost, pay } = visualData;
+        return (
+          <div className="flex justify-center items-center gap-4 p-3 bg-emerald-50 rounded-xl border border-emerald-100 max-w-[260px] mx-auto my-2">
+            <div className="flex flex-col items-center bg-white px-2.5 py-1.5 rounded border border-emerald-200">
+              <span className="text-[10px] font-black text-slate-400">COST</span>
+              <span className="text-xs font-black text-rose-500">${cost.toFixed(2)}</span>
+            </div>
+            <span className="text-lg font-black text-slate-400">➔</span>
+            <div className="flex flex-col items-center bg-white px-2.5 py-1.5 rounded border border-emerald-200">
+              <span className="text-[10px] font-black text-slate-400">PAID WITH</span>
+              <span className="text-xs font-black text-emerald-600">${pay} Note</span>
+            </div>
+          </div>
+        );
+      }
+      case 'area_peri_calc': {
+        const { w, h, isArea } = visualData;
+        return (
+          <div className="flex flex-col items-center my-2">
+            <div 
+              className={`p-1.5 rounded-lg border-2 ${isArea ? 'border-indigo-400 bg-indigo-50/20' : 'border-rose-400 bg-rose-50/10'} flex flex-col gap-0.5`}
+            >
+              {Array.from({ length: h }).map((_, rIdx) => (
+                <div key={rIdx} className="flex gap-0.5">
+                  {Array.from({ length: w }).map((_, cIdx) => (
+                    <div 
+                      key={cIdx} 
+                      className={`w-4 h-4 rounded-xs border ${isArea ? 'bg-indigo-400/40 border-indigo-200' : 'bg-slate-50 border-rose-300/60'}`}
+                    />
+                  ))}
+                </div>
+              ))}
+            </div>
+            <div className="flex gap-4 mt-1.5 text-[10px] font-black text-slate-500">
+              <span>Width: {w}m</span>
+              <span>Height: {h}m</span>
+            </div>
+          </div>
+        );
+      }
+      case 'decimals_val': {
+        const { value } = visualData;
+        return (
+          <div className="flex flex-col items-center gap-1.5 p-3 bg-pink-50/50 rounded-xl border border-pink-100 max-w-[280px] mx-auto my-2">
+            <div className="w-full flex h-5 bg-white rounded border border-pink-200 overflow-hidden">
+              {Array.from({ length: 10 }).map((_, idx) => (
+                <div 
+                  key={idx} 
+                  className={`h-full flex-1 border-r border-pink-100 last:border-0 ${idx < value ? 'bg-pink-400' : 'bg-slate-50'}`} 
+                />
+              ))}
+            </div>
+            <span className="text-xs font-black text-pink-700">{value} out of 10 blocks</span>
+          </div>
+        );
+      }
+      case 'volume_calc': {
+        const { l, w, h } = visualData;
+        return (
+          <div className="flex flex-col items-center gap-1.5 p-3 bg-teal-50/40 rounded-xl border border-teal-100 max-w-[240px] mx-auto my-2">
+            <div className="text-[10px] font-black text-teal-800 uppercase tracking-wider">
+              {l}cm × {w}cm × {h}cm Block
+            </div>
+            {/* Visual rows of stacks representation */}
+            <div className="flex flex-wrap gap-1 justify-center max-w-[150px]">
+              {Array.from({ length: h }).map((_, layerIdx) => (
+                <div key={layerIdx} className="flex gap-0.5 bg-white p-1 rounded border border-teal-200">
+                  {Array.from({ length: l * w }).map((_, cIdx) => (
+                    <div key={cIdx} className="w-2.5 h-2.5 bg-teal-400 rounded-xs border border-teal-500/20" />
+                  ))}
+                </div>
+              ))}
+            </div>
+            <span className="text-[9px] font-bold text-slate-400">Layers stack: {h} layers of {l*w} cubes</span>
+          </div>
+        );
+      }
+      case 'speed_calc': {
+        const { speed, time, distance } = visualData;
+        return (
+          <div className="flex flex-col gap-2 p-3 bg-orange-50/50 rounded-xl border border-orange-100 max-w-[280px] mx-auto my-2">
+            <div className="relative w-full h-6 bg-white rounded-lg border border-orange-200 overflow-hidden flex items-center px-1">
+              {/* Cute sliding emoji car */}
+              <motion.span 
+                animate={{ x: [0, 180, 0] }}
+                transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                className="text-lg select-none"
+              >
+                🚗
+              </motion.span>
+              <div className="absolute right-2 top-1 text-[9px] font-bold text-orange-400">FINISH</div>
+            </div>
+            <div className="flex justify-between text-[10px] font-black text-slate-500 px-1">
+              <span>Speed: {speed} m/s</span>
+              <span>Time: {time}s</span>
+              <span className="text-orange-600">Dist: {distance}m</span>
+            </div>
+          </div>
+        );
+      }
       default:
         return null;
     }

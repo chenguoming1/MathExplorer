@@ -1,0 +1,8 @@
+{
+  "name": "Math Explorer",
+  "description": "An interactive, animated math tutorial app for Primary 1 to 6 featuring hand-crafted lessons, visual equation grids, gamified reward shops, and parental dashboard controls.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
